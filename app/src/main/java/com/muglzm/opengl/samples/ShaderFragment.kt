@@ -2,6 +2,7 @@ package com.muglzm.opengl.samples
 
 import android.opengl.GLSurfaceView
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -26,6 +27,7 @@ class ShaderFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         //获取layout视图
+        Log.d("LZM", "onCreateView: create shader fragment")
         val rootview = inflater.inflate(R.layout.fragment_shader,container,false);
         val glSurfaceView = rootview.findViewById<GLSurfaceView>(R.id.glsurfaceview);
         //Set EGL Version 3
@@ -35,6 +37,5 @@ class ShaderFragment : Fragment() {
         glSurfaceView.setRenderer(ShaderRender())
         glSurfaceView.renderMode = GLSurfaceView.RENDERMODE_WHEN_DIRTY
         return rootview
-
     }
 }

@@ -1,8 +1,8 @@
 package com.muglzm.opengl.render
 
 import android.opengl.GLES30
-import android.opengl.GLES32
 import android.opengl.GLSurfaceView
+import android.util.Log
 import com.muglzm.opengl.util.Util
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
@@ -40,7 +40,7 @@ class ShaderRender:GLSurfaceView.Renderer {
     //Vertex data of triangle
     private val vertexData = floatArrayOf(-1f,-1f,
                                             -1f,1f,
-                                            1f,1f
+                                            1f,1f,
 
                                             -1f,-1f,
                                             1f,1f,
@@ -74,24 +74,32 @@ class ShaderRender:GLSurfaceView.Renderer {
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
 
         //Create GL program
-        val programId = GLES32.glCreateProgram()
+        val programId = GLES30.glCreateProgram()
+        if(programId == 0)
+        {
+            Log.d("LZM", "onSurfaceCreated: create program failed")
+        }
 
         //Load,compile vertex && fragment shader
-        val vertexShader = GLES32.glCreateShader(GLES32.GL_VERTEX_SHADER)
-        val fragmentShader = GLES32.glCreateShader(GLES32.GL_FRAGMENT_SHADER)
+        val vertexShader = GLES30.glCreateShader(GLES30.GL_VERTEX_SHADER)
+        val fragmentShader = GLES30.glCreateShader(GLES30.GL_FRAGMENT_SHADER)
 
-        GLES32.glShaderSource(vertexShader,vertexShaderCode)
-        GLES32.glShaderSource(fragmentShader,fragmentShaderCode)
+        GLES30.glShaderSource(vertexShader,vertexShaderCode)
+        GLES30.glShaderSource(fragmentShader,fragmentShaderCode)
+
+        GLES30.glCompileShader(vertexShader)
+        GLES30.glCompileShader(fragmentShader)
 
         //Attach ths shader to program
-        GLES32.glAttachShader(programId,vertexShader)
-        GLES32.glAttachShader(programId,fragmentShader)
+        GLES30.glAttachShader(programId,vertexShader)
+        GLES30.glAttachShader(programId,fragmentShader)
+
 
         //Link program
-        GLES32.glLinkProgram(programId)
+        GLES30.glLinkProgram(programId)
 
         //Apply GL program
-        GLES32.glUseProgram(programId)
+        GLES30.glUseProgram(programId)
 
         //Put triangle vertex data into the vertexDataBuffer
         vertexDataBuffer = ByteBuffer.allocateDirect(vertexData.size * java.lang.Float.SIZE / 8)
@@ -101,11 +109,11 @@ class ShaderRender:GLSurfaceView.Renderer {
         vertexDataBuffer.position(0)
 
         // 启动对应位置的参数，这里直接使用LOCATION_ATTRIBUTE_POSITION，而无需像OpenGL 2.0那样需要先获取参数的location
-        GLES32.glEnableVertexAttribArray(LOCATION_ATTRIBUTE_POSITION)
+        GLES30.glEnableVertexAttribArray(LOCATION_ATTRIBUTE_POSITION)
 
         // 指定a_position所使用的顶点数据
         // Specify the data of a_position
-        GLES32.glVertexAttribPointer(LOCATION_ATTRIBUTE_POSITION, VERTEX_COMPONENT_COUNT, GLES30.GL_FLOAT, false,0, vertexDataBuffer)
+        GLES30.glVertexAttribPointer(LOCATION_ATTRIBUTE_POSITION, VERTEX_COMPONENT_COUNT, GLES30.GL_FLOAT, false,0, vertexDataBuffer)
 
         //Put texture data into the vertexDataBuffer
         textureCoordinateDataBuffer = ByteBuffer.allocateDirect(textureCoordinateData.size * java.lang.Float.SIZE / 8)
@@ -128,7 +136,7 @@ class ShaderRender:GLSurfaceView.Renderer {
         // 将图片解码并加载到纹理中
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
         val bitmap = Util.decodeBitmapFromAssets("test.png")
-        GLES32.glBindTexture(GLES32.GL_TEXTURE_2D, imageTexture)
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, imageTexture)
         val b = ByteBuffer.allocate(bitmap.width * bitmap.height * 4)
         bitmap.copyPixelsToBuffer(b)
         b.position(0)
@@ -146,6 +154,9 @@ class ShaderRender:GLSurfaceView.Renderer {
         // 启动对应位置的参数，这里直接使用LOCATION_UNIFORM_TEXTURE，而无需像OpenGL 2.0那样需要先获取参数的location
         // Enable the parameter of the location. Here we can simply use LOCATION_UNIFORM_TEXTURE, while in OpenGL 2.0 we have to query the location of the parameter
         GLES30.glUniform1i(LOCATION_UNIFORM_TEXTURE, 0)
+
+        Log.d("LZM", "onSurfaceCreated: create render")
+
     }
 
     override fun onSurfaceChanged(gl: GL10?, width: Int, height: Int) {
@@ -155,13 +166,22 @@ class ShaderRender:GLSurfaceView.Renderer {
 
     override fun onDrawFrame(gl: GL10?) {
         //Clear
-        GLES32.glClearColor(0.9f,0.9f,0.9f,1f)
-        GLES32.glClear(GLES30.GL_COLOR_BUFFER_BIT)
+        GLES30.glClearColor(0.9f,0.9f,0.9f,1f)
+        GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT)
 
         //Set view area
         GLES30.glViewport(0, 0, glSurfaceViewWidth, glSurfaceViewHeight)
 
         //Set status before rendering
+        GLES30.glEnableVertexAttribArray(LOCATION_ATTRIBUTE_POSITION)
+        GLES30.glVertexAttribPointer(LOCATION_ATTRIBUTE_POSITION, VERTEX_COMPONENT_COUNT, GLES30.GL_FLOAT, false,0, vertexDataBuffer)
+        GLES30.glEnableVertexAttribArray(LOCATION_ATTRIBUTE_TEXTURE_COORDINATE)
+        GLES30.glVertexAttribPointer(LOCATION_ATTRIBUTE_TEXTURE_COORDINATE, TEXTURE_COORDINATE_COMPONENT_COUNT, GLES30.GL_FLOAT, false,0, textureCoordinateDataBuffer)
+        GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
+        GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, imageTexture)
 
+        // 调用draw方法用TRIANGLES的方式执行渲染，顶点数量为3个
+        // Call the draw method with GL_TRIANGLES to render 3 vertices
+        GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, vertexData.size / VERTEX_COMPONENT_COUNT)
     }
 }

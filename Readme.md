@@ -1,8 +1,11 @@
 # OpenGL3.0 Demo Project based on Kotlin
 
-##  1. Shader Dmeo
+##  1. Shader Demo
 <center>
 
-![ss](md_assets/)
+<div align="center">
+    <img src="md_assets/shader.png" width="20%">
+</div>
+
 
 </center>

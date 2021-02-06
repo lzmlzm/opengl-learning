@@ -40,11 +40,11 @@ class Util {
         }
 
         fun getScreenWidth() : Int {
-            return 1080
+            return 1440
         }
 
         fun getScreenHeight() : Int {
-            return 1440
+            return 1960
         }
 
     }
