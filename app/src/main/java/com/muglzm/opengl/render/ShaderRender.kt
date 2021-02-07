@@ -38,6 +38,7 @@ class ShaderRender:GLSurfaceView.Renderer {
 
 
     //Vertex data of triangle
+    //两个三角形拼成矩形
     private val vertexData = floatArrayOf(-1f,-1f,
                                             -1f,1f,
                                             1f,1f,
@@ -46,6 +47,7 @@ class ShaderRender:GLSurfaceView.Renderer {
                                             1f,1f,
                                             1f,-1f)
 
+    //两个三角形
     private val VERTEX_COMPONENT_COUNT = 2;
     private lateinit var vertexDataBuffer : FloatBuffer
 
@@ -58,6 +60,7 @@ class ShaderRender:GLSurfaceView.Renderer {
                                                         0f, 1f,
                                                         1f, 0f,
                                                         1f, 1f)
+    //两个三角形
     private val TEXTURE_COORDINATE_COMPONENT_COUNT = 2
     private lateinit var textureCoordinateDataBuffer : FloatBuffer
 
@@ -70,38 +73,33 @@ class ShaderRender:GLSurfaceView.Renderer {
     private val LOCATION_ATTRIBUTE_POSITION = 0
     private val LOCATION_ATTRIBUTE_TEXTURE_COORDINATE = 1
     private val LOCATION_UNIFORM_TEXTURE = 0
-
+    private val TAG = "LZM"
     override fun onSurfaceCreated(gl: GL10?, config: EGLConfig?) {
 
-        //Create GL program
+        //创建GL程序
         val programId = GLES30.glCreateProgram()
-        if(programId == 0)
-        {
-            Log.d("LZM", "onSurfaceCreated: create program failed")
-        }
 
-        //Load,compile vertex && fragment shader
+        //创建顶点shader
         val vertexShader = GLES30.glCreateShader(GLES30.GL_VERTEX_SHADER)
         val fragmentShader = GLES30.glCreateShader(GLES30.GL_FRAGMENT_SHADER)
-
+        //链接shader和顶点数组
         GLES30.glShaderSource(vertexShader,vertexShaderCode)
         GLES30.glShaderSource(fragmentShader,fragmentShaderCode)
-
+        //编译shader
         GLES30.glCompileShader(vertexShader)
         GLES30.glCompileShader(fragmentShader)
 
-        //Attach ths shader to program
+        //将shader贴到GL程序上
         GLES30.glAttachShader(programId,vertexShader)
         GLES30.glAttachShader(programId,fragmentShader)
 
-
-        //Link program
+        //链接程序
         GLES30.glLinkProgram(programId)
 
-        //Apply GL program
+        //使用程序
         GLES30.glUseProgram(programId)
 
-        //Put triangle vertex data into the vertexDataBuffer
+        //将三角形顶点数据放入vertexDataBuffer
         vertexDataBuffer = ByteBuffer.allocateDirect(vertexData.size * java.lang.Float.SIZE / 8)
             .order(ByteOrder.nativeOrder())
             .asFloatBuffer()
@@ -112,10 +110,9 @@ class ShaderRender:GLSurfaceView.Renderer {
         GLES30.glEnableVertexAttribArray(LOCATION_ATTRIBUTE_POSITION)
 
         // 指定a_position所使用的顶点数据
-        // Specify the data of a_position
         GLES30.glVertexAttribPointer(LOCATION_ATTRIBUTE_POSITION, VERTEX_COMPONENT_COUNT, GLES30.GL_FLOAT, false,0, vertexDataBuffer)
 
-        //Put texture data into the vertexDataBuffer
+        //将三角形顶点数据放入textureCoordinateDataBuffer
         textureCoordinateDataBuffer = ByteBuffer.allocateDirect(textureCoordinateData.size * java.lang.Float.SIZE / 8)
             .order(ByteOrder.nativeOrder())
             .asFloatBuffer()
@@ -141,11 +138,12 @@ class ShaderRender:GLSurfaceView.Renderer {
         bitmap.copyPixelsToBuffer(b)
         b.position(0)
 
+        //设置环绕过滤参数
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MIN_FILTER, GLES30.GL_LINEAR)
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_MAG_FILTER, GLES30.GL_LINEAR)
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_S, GLES30.GL_CLAMP_TO_EDGE)
         GLES30.glTexParameteri(GLES30.GL_TEXTURE_2D, GLES30.GL_TEXTURE_WRAP_T, GLES30.GL_CLAMP_TO_EDGE)
-
+        //贴图
         GLES30.glTexImage2D(
             GLES30.GL_TEXTURE_2D, 0, GLES30.GL_RGBA, bitmap.width,
             bitmap.height, 0, GLES30.GL_RGBA, GLES30.GL_UNSIGNED_BYTE, b)
@@ -168,7 +166,7 @@ class ShaderRender:GLSurfaceView.Renderer {
         //Clear
         GLES30.glClearColor(0.9f,0.9f,0.9f,1f)
         GLES30.glClear(GLES30.GL_COLOR_BUFFER_BIT)
-
+        Log.d(TAG, "onDrawFrame: Draw frame")
         //Set view area
         GLES30.glViewport(0, 0, glSurfaceViewWidth, glSurfaceViewHeight)
 
@@ -177,11 +175,12 @@ class ShaderRender:GLSurfaceView.Renderer {
         GLES30.glVertexAttribPointer(LOCATION_ATTRIBUTE_POSITION, VERTEX_COMPONENT_COUNT, GLES30.GL_FLOAT, false,0, vertexDataBuffer)
         GLES30.glEnableVertexAttribArray(LOCATION_ATTRIBUTE_TEXTURE_COORDINATE)
         GLES30.glVertexAttribPointer(LOCATION_ATTRIBUTE_TEXTURE_COORDINATE, TEXTURE_COORDINATE_COMPONENT_COUNT, GLES30.GL_FLOAT, false,0, textureCoordinateDataBuffer)
+        //激活纹理0
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
+        //绑定纹理0
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, imageTexture)
 
         // 调用draw方法用TRIANGLES的方式执行渲染，顶点数量为3个
-        // Call the draw method with GL_TRIANGLES to render 3 vertices
         GLES30.glDrawArrays(GLES30.GL_TRIANGLES, 0, vertexData.size / VERTEX_COMPONENT_COUNT)
     }
 }

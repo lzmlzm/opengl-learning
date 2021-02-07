@@ -3,11 +3,13 @@ package com.muglzm.opengl
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.muglzm.opengl.samples.ShaderFragment
+import com.muglzm.opengl.samples.TextureArray
 
 class MySampleActivity: AppCompatActivity() {
     private val samples =
         arrayOf(
-            ShaderFragment()
+            ShaderFragment(),
+            TextureArray()
         //Add more sample functions
         )
     override fun onCreate(savedInstanceState: Bundle?) {
