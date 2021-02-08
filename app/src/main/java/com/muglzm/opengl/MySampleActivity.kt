@@ -2,14 +2,18 @@ package com.muglzm.opengl
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.muglzm.opengl.samples.FBO
 import com.muglzm.opengl.samples.ShaderFragment
 import com.muglzm.opengl.samples.TextureArray
+import com.muglzm.opengl.samples.VBO_IBO
 
 class MySampleActivity: AppCompatActivity() {
     private val samples =
         arrayOf(
             ShaderFragment(),
-            TextureArray()
+            TextureArray(),
+            VBO_IBO(),
+            FBO()
         //Add more sample functions
         )
     override fun onCreate(savedInstanceState: Bundle?) {

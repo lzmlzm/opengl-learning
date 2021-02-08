@@ -37,7 +37,8 @@ class MainActivity : AppCompatActivity() {
             resources.getString(R.string.sample_6),
             resources.getString(R.string.sample_7),
             resources.getString(R.string.sample_8),
-            resources.getString(R.string.sample_9)
+            resources.getString(R.string.sample_9),
+            resources.getString(R.string.sample_10)
         )
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
 
