@@ -13,7 +13,8 @@ class MySampleActivity: AppCompatActivity() {
             FBO(),
             EGLSample(),
             MatrixTransform(),
-                ColorBlend()
+                ColorBlend(),
+                Lighting()
         //Add more sample functions
         )
     override fun onCreate(savedInstanceState: Bundle?) {

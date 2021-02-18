@@ -7,10 +7,10 @@
     <string name="sample_4">EGL(EGL)</string>
     <string name="sample_5">矩阵变换(Matrix Transform)</string>
     <string name="sample_6">颜色混合(Color Blend)</string>
-    <string name="sample_7">二进制GL程序(Binary GL Program)</string>
+    <string name="sample_7">光照(Lighting)</string>
     <string name="sample_8">栅栏(Fence)</string>
     <string name="sample_9">多重目标渲染(Multiple Render Target)</string>
-    <string name="sample_10">光照(Lighting)</string>
+    <string name="sample_10">二进制GL程序(Binary GL Program)</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
