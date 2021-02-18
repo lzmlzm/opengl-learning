@@ -19,8 +19,8 @@ class FBO: Fragment() {
     ): View? {
         //获取layout视图
         Log.d("LZM", "onCreateView: create shader fragment")
-        val rootview = inflater.inflate(R.layout.fragment_shader,container,false);
-        val glSurfaceView = rootview.findViewById<GLSurfaceView>(R.id.glsurfaceview);
+        val rootview = inflater.inflate(R.layout.fragment_shader,container,false)
+        val glSurfaceView = rootview.findViewById<GLSurfaceView>(R.id.glsurfaceview)
         //Set EGL Version 3
         glSurfaceView.setEGLContextClientVersion(3)
         //Set RGBA:8888

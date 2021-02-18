@@ -11,7 +11,8 @@ class MySampleActivity: AppCompatActivity() {
             TextureArray(),
             VBO_IBO(),
             FBO(),
-            EGLSample()
+            EGLSample(),
+            MatrixTransform()
         //Add more sample functions
         )
     override fun onCreate(savedInstanceState: Bundle?) {
