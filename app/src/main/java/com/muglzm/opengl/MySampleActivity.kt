@@ -12,7 +12,8 @@ class MySampleActivity: AppCompatActivity() {
             VBO_IBO(),
             FBO(),
             EGLSample(),
-            MatrixTransform()
+            MatrixTransform(),
+                ColorBlend()
         //Add more sample functions
         )
     override fun onCreate(savedInstanceState: Bundle?) {
