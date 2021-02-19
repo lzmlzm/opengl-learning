@@ -11,6 +11,7 @@ import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import com.muglzm.opengl.R
 import com.muglzm.opengl.render.lighting.DirectionLightRender
+import com.muglzm.opengl.render.lighting.PointLightRender
 
 class Lighting:Fragment(){
 
@@ -20,9 +21,13 @@ class Lighting:Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val directionalLight=view.findViewById<Button>(R.id.directionalLight)
+        val pointLight=view.findViewById<Button>(R.id.pointLight)
         val glSurfaceViewContainer = view.findViewById<FrameLayout>(R.id.glSurfaceViewContainer)
         directionalLight.setOnClickListener {
             updateSample(glSurfaceViewContainer, DirectionLightRender())
+        }
+        pointLight.setOnClickListener {
+            updateSample(glSurfaceViewContainer, PointLightRender())
         }
 
     }

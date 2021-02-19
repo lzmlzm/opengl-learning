@@ -199,6 +199,7 @@ open class LightingRenderer(private val vertexShaderPath: String, private val fr
 
     override fun onDrawFrame(gl: GL10?) {
 
+        //绕Y轴一直旋转
         rotateY += 1f
 
         GLES30.glUseProgram(programId)
@@ -253,12 +254,14 @@ open class LightingRenderer(private val vertexShaderPath: String, private val fr
         Matrix.multiplyMM(mvpMatrix, 0, viewMatrix, 0, modelMatrix, 0)
         Matrix.multiplyMM(mvpMatrix, 0, projectMatrix, 0, mvpMatrix, 0)
 
+        //传入MVP矩阵
         GLES30.glUniformMatrix4fv(GLES30.glGetUniformLocation(programId, "model"), 1, false, modelMatrix, 0)
         GLES30.glUniformMatrix4fv(GLES30.glGetUniformLocation(programId, "view"), 1, false, viewMatrix, 0)
         GLES30.glUniformMatrix4fv(GLES30.glGetUniformLocation(programId, "projection"), 1, false, projectMatrix, 0)
 
         GLES30.glActiveTexture(GLES30.GL_TEXTURE0)
         GLES30.glBindTexture(GLES30.GL_TEXTURE_2D, imageTexture)
+        //传入视角位置，光照颜色，物体颜色
         GLES30.glUniform1i(GLES30.glGetUniformLocation(programId, "imageTex"), 0)
         GLES30.glUniform3f(GLES30.glGetUniformLocation(programId, "viewPos"), 0f, 0f, 5f)
         GLES30.glUniform3f(GLES30.glGetUniformLocation(programId, "lightColor"), 1f, 1f, 1f)
