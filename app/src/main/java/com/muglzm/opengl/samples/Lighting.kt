@@ -10,6 +10,7 @@ import android.widget.Button
 import android.widget.FrameLayout
 import androidx.fragment.app.Fragment
 import com.muglzm.opengl.R
+import com.muglzm.opengl.render.lighting.BumpLightRender
 import com.muglzm.opengl.render.lighting.DirectionLightRender
 import com.muglzm.opengl.render.lighting.PointLightRender
 import com.muglzm.opengl.render.lighting.SpotLightRender
@@ -24,6 +25,7 @@ class Lighting:Fragment(){
         val directionalLight=view.findViewById<Button>(R.id.directionalLight)
         val pointLight=view.findViewById<Button>(R.id.pointLight)
         val spotLight=view.findViewById<Button>(R.id.spotLight)
+        val bumplight=view.findViewById<Button>(R.id.bumped)
         val glSurfaceViewContainer = view.findViewById<FrameLayout>(R.id.glSurfaceViewContainer)
         directionalLight.setOnClickListener {
             updateSample(glSurfaceViewContainer, DirectionLightRender())
@@ -33,6 +35,9 @@ class Lighting:Fragment(){
         }
         spotLight.setOnClickListener {
             updateSample(glSurfaceViewContainer,SpotLightRender())
+        }
+        bumplight.setOnClickListener {
+            updateSample(glSurfaceViewContainer,BumpLightRender())
         }
 
 

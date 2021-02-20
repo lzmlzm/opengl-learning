@@ -7,6 +7,6 @@ class DirectionLightRender :LightingRenderer("lighting/directlight_vertex.glsl",
     override fun onDrawFrame(gl: GL10?) {
         super.onDrawFrame(gl)
         GLES30.glUniform3f(GLES30.glGetUniformLocation(programId, "lightDirection"), -5f, 0f, 0f)
-        assert(GLES30.glGetError() == 0)
+        //assert(GLES30.glGetError() == 0)
     }
 }
